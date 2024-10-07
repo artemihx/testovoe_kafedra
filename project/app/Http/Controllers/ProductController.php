@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Actions\AddToCartAction;
 use App\Http\Actions\GetUserCartsAction;
+use App\Http\Actions\MakeOrderUserAction;
 use App\Models\Cart;
+use App\Models\CartsHistory;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,5 +34,16 @@ class ProductController extends Controller
     {
         $cart->delete();
         return response()->json(['message' => 'Item removed from cart'], 200);
+    }
+
+    public function makeOrder()
+    {
+        $order = MakeOrderUserAction::execute(auth()->id());
+        return response()->json(['order_id'=> $order->id, 'message' => 'Order is processed'], 201);
+    }
+
+    public function getOrders()
+    {
+        return CartsHistory::all()->where('user_id', auth()->id());
     }
 }

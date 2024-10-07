@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -25,6 +26,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        return 'da';
+        auth()->user()->tokens()->delete();
+        return response()->json(['message' => 'logout'], 200);
     }
 }

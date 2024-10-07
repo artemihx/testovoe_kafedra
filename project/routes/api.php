@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::get('logout', [AuthController::class, 'logout']);
 
 Route::get('products', [ProductController::class, 'index']);
 
@@ -16,4 +15,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('cart',[ProductController::class, 'getCart']);
     Route::post('cart/{product}', [ProductController::class, 'addToCart']);
     Route::delete('cart/{cart}', [ProductController::class, 'deleteFromCart']);
+    Route::post('order', [ProductController::class, 'makeOrder']);
+    Route::get('order', [ProductController::class, 'getOrders']);
+    Route::get('logout', [AuthController::class, 'logout']);
 });
