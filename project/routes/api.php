@@ -18,4 +18,10 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::post('order', [ProductController::class, 'makeOrder']);
     Route::get('order', [ProductController::class, 'getOrders']);
     Route::get('logout', [AuthController::class, 'logout']);
+
+    Route::group(['middleware' => 'role:admin'], function (){
+       Route::post('product', [ProductController::class, 'addProduct']);
+       Route::delete('product/{product}',[ProductController::class, 'deleteProduct']);
+       Route::patch('product/{product}', [ProductController::class, 'updateProduct']);
+    });
 });
