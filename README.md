@@ -14,5 +14,8 @@ docker compose exec laravel bash
 4. Переименовать .env.example в .env
 5. Накатить миграцию с сидами:
 ```
+composer install
+```
+```
 php artisan migrate:fresh --seed
 ```
