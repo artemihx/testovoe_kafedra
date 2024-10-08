@@ -11,6 +11,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Cart;
 use App\Models\CartsHistory;
 use App\Models\Product;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,7 @@ class ProductController extends Controller
 
     public function deleteFromCart(Cart $cart)
     {
+        throw_if(auth()->id() != $cart->user_id, new HttpResponseException(response()->json(['message'=> 'Forbidden for you'], 401)));
         $cart->delete();
         return response()->json(['message' => 'Item removed from cart'], 200);
     }

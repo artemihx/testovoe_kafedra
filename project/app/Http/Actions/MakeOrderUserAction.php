@@ -16,21 +16,20 @@ class MakeOrderUserAction
     public static function execute(int $user_id)
     {
         $carts = Cart::all()->where('user_id', $user_id);
-        if($carts->count() > 0)
+
+        throw_if($carts->count() == 0, new HttpResponseException(response()->json(['error'=> 422,'message' => 'Cart is empty'], 422)));
+
+        $products  = [];
+        foreach ($carts as $cart)
         {
-            $products  = [];
-            foreach ($carts as $cart)
-            {
-                $products[] = $cart->product->id;
-            }
-            $newOrder = new CartsHistory([
-                'user_id' => auth()->id(),
-                'products'=> json_encode($products),
-            ]);
-            $newOrder->save();
-            Cart::destroy($carts);
-            return $newOrder;
+            $products[] = $cart->product->id;
         }
-        throw new HttpResponseException(response()->json(['error'=> 422,'message' => 'Cart is empty'], 422));
+        $newOrder = new CartsHistory([
+            'user_id' => auth()->id(),
+            'products'=> json_encode($products),
+        ]);
+        $newOrder->save();
+        Cart::destroy($carts);
+        return $newOrder;
     }
 }
